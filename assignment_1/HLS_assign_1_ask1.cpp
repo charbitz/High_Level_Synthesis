@@ -35,5 +35,5 @@ int main()
 		std :: cout<<"number :"<<num<<"\t"<<"count :"<<count<<"\n";
 	}
 		
-	return 0;
+	return 0; 
 }
