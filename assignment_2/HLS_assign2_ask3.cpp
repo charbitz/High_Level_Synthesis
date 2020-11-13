@@ -6,15 +6,19 @@
 
 using std::endl;
 
-void run_length_encode (ac_channel<ac_int<4,false> >&in , 
-						ac_channel<ac_int<4,false> >&out)
+static const int W = 4;
+
+typedef ac_int<W,false> Data_t ; 
+
+void run_length_encode (ac_channel< Data_t >&in , 
+						ac_channel< Data_t >&out)
 	{
 		if (in.available(10))
 		{
-			ac_int<4,false> cnt = 1;	//the existence of a number means min count = 1
+			Data_t cnt = 1;	//the existence of a number means min count = 1
 			
 //			array of ac_int:
-			ac_int<4,false> arr[10];
+			Data_t arr[10];
 			
 			
 //			loop to store the data from the channel to the array :
@@ -56,8 +60,8 @@ int main()
 {
 	srand(time(NULL));
 	
-	ac_channel<ac_int<4,false> >in;
-	ac_channel<ac_int<4,false> >out;
+	ac_channel< Data_t >in;
+	ac_channel< Data_t >out;
 	
 	int random_num ;
 	
