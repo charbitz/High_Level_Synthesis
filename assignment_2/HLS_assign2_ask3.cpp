@@ -22,7 +22,6 @@ void run_length_encode (ac_channel<ac_int<4,false> >&in ,
 			for(int i=0;i<10;i++)
 			{
 				arr[i] = in.read();
-				std::cout<<"number : "<<arr[i]<<" stored in array at position "<<i<<endl;
 			}
 			
 //			loop to check consecutively numbers :	
@@ -100,7 +99,6 @@ int main()
 		random_num = rand() % 16 ;		// in order not to wrap arround due to 4 bits limit
 		std::cout<<"random_num is "<<random_num<<endl;
 		in.write(random_num);
-//		std :: cout<<"Number :"<<random_num<<"\t"<<"Checksum :"<<ch_s<<"\n";
 		run_length_encode(in,out);	
 	}
 
