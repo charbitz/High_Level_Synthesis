@@ -3,13 +3,16 @@
 #include <stdlib.h> // it's for rand()
 #include <time.h>   // it's for seeding the srand() 
 
-unsigned int checksum (unsigned int N)
+
+typedef unsigned int uint ;
+
+uint checksum (uint N)
 {
-	unsigned int ch_sum;
-	unsigned int digits;
+	uint ch_sum;
+	uint digits;
 	
 //	array to store my decimal digits of number N :
-	unsigned int arr_dec_dig[10] = {0,0,0,0,0,0,0,0,0,0};
+	uint arr_dec_dig[10] = {0,0,0,0,0,0,0,0,0,0};
 	
 	if(N<=9) 
 	{
@@ -96,8 +99,8 @@ int main()
 {
 	srand(time(NULL));
 	
-	unsigned int ch_s;
-	unsigned int random_num;
+	uint ch_s;
+	uint random_num;
 	
 	for(int i = 0 ;i<10;i++)
 	{
