@@ -10,8 +10,7 @@ static const int W = 4;
 
 typedef ac_int<W,false> Data_t ; 
 
-void run_length_encode (ac_channel< Data_t >&in , 
-						ac_channel< Data_t >&out)
+void run_length_encode (ac_channel< Data_t >&in , ac_channel< Data_t >&out)
 	{
 		if (in.available(10))
 		{
