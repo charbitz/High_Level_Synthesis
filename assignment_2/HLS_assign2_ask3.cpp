@@ -14,6 +14,7 @@ void run_length_encode (ac_channel< Data_t >&in , ac_channel< Data_t >&out)
 	{
 		if (in.available(10))
 		{
+//			we need to represent only numbers from 0 to 10 , so 4 bits will be ok (we don't need an int cnt)
 			Data_t cnt = 1;	//the existence of a number means min count = 1
 			
 //			array of ac_int:
