@@ -18,13 +18,17 @@ public:
 
 #pragma hls_design interface
 void CCS_BLOCK(compute_row_sum)(short a[N][M], short row_sum[N]) {
-  
+//local variable :
+  short temp_sum;
   ROWS:for (int i=0; i < N; i++) {
-    row_sum[i] = 0;
+        temp_sum = 0;
     COLS:for (int j=0; j < M; j++) {
-      row_sum[i] += a[i][j];
+        temp_sum = temp_sum + a[i][j];
     }
+    // only 1 write , once in the ROWS loop
+        row_sum[i] = temp_sum;
   }
+  
 }
 
 };
