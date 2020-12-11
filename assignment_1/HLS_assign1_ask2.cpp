@@ -3,6 +3,7 @@
 #include <stdlib.h> // it's for rand()
 #include <time.h>   // it's for seeding the srand() 
 
+static const int RUNS = 10;
 
 typedef unsigned int uint ;
 
@@ -55,7 +56,7 @@ uint checksum (uint N)
 		digits = 10;
 	}
 	
-	std :: cout<<"Digits :"<<digits<<"\n";
+//	std :: cout<<"Digits :"<<digits<<"\n";
 	
 	for(int i=1 ; i<digits + 1 ; i++)
 	{
@@ -94,7 +95,7 @@ uint checksum (uint N)
 
 }
 
-
+ 
 int main()
 {
 	srand(time(NULL));
@@ -102,11 +103,13 @@ int main()
 	uint ch_s;
 	uint random_num;
 	
-	for(int i = 0 ;i<10;i++)
+//	Loop to run 10 tests :
+	for(int i=0;i<RUNS;i++)
 	{
+		std::cout << "Trial " << i << "\n";
 		random_num=rand() % 4294967296 ;
 		ch_s = checksum(random_num);
-		std :: cout<<"Number :"<<random_num<<"\t"<<"Checksum :"<<ch_s<<"\n";	
+		std :: cout<<"Number :  "<<random_num<<"\n"<<"Checksum :  "<<ch_s<<"\n\n";	
 	}
 		
 	return 0;	
