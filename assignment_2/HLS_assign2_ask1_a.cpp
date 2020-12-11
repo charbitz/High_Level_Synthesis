@@ -1,12 +1,11 @@
 #include <iostream>
-#include<C:/Users/HP/Desktop/HLS_demos/ac_int.h>
-//#include<ac_int.h>
+#include<ac_int.h>
+
 using namespace std;
 
 int main()
 {
 	
-//	Unsigned numbers :
 	ac_int <8,false> a,b; 	//unsigned 8 bits [0...255]
 	ac_int <9,true> c,d; 	//signed 9 bits [-256...255]
 	
@@ -15,17 +14,18 @@ int main()
 
 
 	ac_int<16, false> e;
-//	
-//	a = b = 0;
-//	for ( int i = 0 ; i<256  ; i++)
-//	{
-//		std :: cout <<"a = "<<a<<" 		b = "<<b ;
-//		e = a * b;
-//		std :: cout <<"		e = "<<e << endl;
-//		a+=1;	
-//		b+=1;
-// 
-//	}
+	std :: cout <<"Trial for product: a * b :"<<endl ;
+	a = b = 0;
+	for ( int i = 0 ; i<256  ; i++)
+	{
+		std :: cout <<"a = "<<a<<" 		b = "<<b ;
+		e = a * b;
+		std :: cout <<"		e = "<<e << endl;
+		a += 1;	
+		b += 1;
+ 
+	}
+	std :: cout <<endl ;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -37,17 +37,18 @@ int main()
 	
 // 			check 0 to 255 :
 
-//	c = d = 0;
-//	for ( int j = 0 ; j<=255  ; j++)
-//	{
-//		std :: cout <<"c = "<<c<<" 		d = "<<d ;
-//		z = c * d;
-//		std :: cout <<"		z = "<<z << endl;
-//		c+=1;	
-//		d+=1;
-// 
-//	}
-	
+	std :: cout <<"Trial for product: a * b :"<<endl ;
+	c = d = 0;
+	for ( int j = 0 ; j<=255  ; j++)
+	{
+		std :: cout <<"c = "<<c<<" 		d = "<<d ;
+		z = c * d;
+		std :: cout <<"		z = "<<z << endl;
+		c += 1;	
+		d += 1;
+ 
+	}
+	std :: cout <<endl ;
 	
 	
 //			check -256 to 0 :
@@ -92,9 +93,8 @@ int main()
 		c+=1;
 		d+=1;
 
- 
 	}
-	
+	std :: cout <<endl ;	
 	
 	
 	return 0;
