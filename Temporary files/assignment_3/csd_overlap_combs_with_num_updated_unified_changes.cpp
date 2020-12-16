@@ -12,6 +12,9 @@
 //
 
 
+/*	A combination which is mentioned at the following comments refer to the desired bit-stream of consecutive 1s followed by a 0 (looking from LSB to MSB). */
+
+
 /*	The variable cnt counts the consequtive 1s. With the below implementation cnt starts at value 1 and increases as we find 2 consecutive 1s. */
 
 
@@ -41,10 +44,11 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_n)
 {
 //	Trial for run with overlapping combinations :
 	
-//	cnt will be the counter for the consequtively 1s :
+//	cnt will be the counter of the consequtively 1s :
 	int cnt = 1;
 //	rdy_ovrlp_comb is a flag to know if there is an overlapp in the future :
 	int rdy_ovrlp_comb = 0;
+//	We need to update the num in order to be able to find overlapping combinations :
 	ac_int<W,false> num_upd = num;
 //	UA DIAGRPHEI 
 	for(int k=0;k<W;k++)
@@ -58,7 +62,8 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_n)
 	for(int i=0;i<W;i++)
 	{
 		std::cout<<"i = "<<i<<endl;
-//		check here if there was an alert for an overalapping combination, if there was, start checking from the previous bit , not the current :
+//		Check here if there was an alert for an overalapping combination. 
+//		If  yes, start checking from the previous bit , not the current one:
 		if(rdy_ovrlp_comb == 1)
 		{
 			std::cout<<"overlapping comb situation here!!!"<<endl;
@@ -66,16 +71,17 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_n)
 			rdy_ovrlp_comb = 0;
 		}
 		
-		if(num_upd.slc<1>(i) == 1)																				//new code check for num_upd
+		if(num_upd.slc<1>(i) == 1)
 		{
 			if(i == W-1)
 			{
-//				Now we are at the MSB, so no need to check for consecutive 1s :
+//				Here we check MSB, so no need to check for consecutive 1s :
 				std::cout<<"LAST BIT (W-1) is an 1 !!! "<<endl;
 				
+//				The conditin cnt>1 means that we had at least 2 consequtive 1s(a wanted combination found), otherwise we had just found a single 1 :
 				if(cnt>1)
 				{
-//					helper 1-bit words in order to fill in the components x_p and x_n : 
+//					Helping 1-bit words in order to fill in the components x_p and x_n : 
 					ac_int<1,0> hlpr_xn;
 					ac_int<1,0> hlpr_xp;
 					
@@ -94,33 +100,29 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_n)
 //						At the MSB (W-1) we need to put an 1 to x_p:
 						else if(j==i+1)								
 						{
-							hlpr_xp = 1;							
-//							x_p.set_slc(j,hlpr.slc<1>(0));
-//							num_upd.set_slc(j,num.slc<1>(0));										//new code for update the num_upd variable
-//							hlpr = 0;							
+							hlpr_xp = 1;														
 						}
-						
 						x_p.set_slc(j,hlpr_xp.slc<1>(0));
 						x_n.set_slc(j,hlpr_xn.slc<1>(0));
 //						num_upd.set_slc(j,hlpr_xp.slc<1>(0));								  		//new code for update the num_upd variable_ TRY THAT HERE
 					}
+//					After updating num_upd, x_p, x_n we need to initialize our cnt back to 1, in order to count new bit-streams of 1s :
 					cnt = 1;
 //					* * * After that combination we don't have to check for an overlapping situation because there will be no 1 after the MSB! * * *
 				}
 				else
 				{
-//					copy single 1 found for x_p or invert it for x_n :
-//					ac_int<1,false> hlprxp = 1;
-//					ac_int<1,false> hlprxn = 0;
+//					If there was found a single 1 and not a bit-stream of consequtive 1s, then just :
+//					Helping 1-bit words in order to fill in the components x_p and x_n : 
 					ac_int<1,false> hlpr_single = 1;
 //					x_p.set_slc(i,hlpr2.slc<1>(0));		//new code for x_p assign (15/12)
 
-//					copy the single 1 for x_p:
-					std::cout<<"Found single 1 so copy it to 0 for x_p"<<endl;
+//					-copy the single 1 for x_p:
+					std::cout<<"Found single 1 so copy it for x_p"<<endl;
 					x_p.set_slc(i,hlpr_single.slc<1>(0));
 
 					hlpr_single = 0;
-//					convert the single 1 into a 0 for x_n:
+//					-convert the single 1 into a 0 for x_n:
 					std::cout<<"Found single 1 so convert it to 0 for x_n"<<endl;
 					x_n.set_slc(i,hlpr_single.slc<1>(0));
 				}	
@@ -128,7 +130,7 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_n)
 			else
 			{
 //				Now we check all the other bits apart from MSB : 
-				if(num_upd.slc<1>(i)==num_upd.slc<1>(i+1))														//new code check for num_upd
+				if(num_upd.slc<1>(i)==num_upd.slc<1>(i+1))
 				{
 					std::cout<<"		2 consequtively 1s found!"<<endl;
 					cnt += 1;
@@ -137,25 +139,23 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_n)
 				{
 					if(cnt>1)
 					{	
-//						helper 1-bit words in order to fill in the components x_p and x_n : 
+//						Helping 1-bit words in order to fill in the components x_p and x_n : 
 						ac_int<1,0> hlpr_x_p;
 						ac_int<1,0> hlpr_x_n;
 						
 						for(int jj=i-cnt+1;jj<i+2;jj++)
 						{
 							std::cout<<"  jj = "<<jj<<endl;
-//							x_p.set_slc(jj,~num_upd.slc<1>(jj));												//new code check for num_upd
-//							num_upd.set_slc(jj,~num.slc<1>(jj));
 							hlpr_x_p = 0;
 							hlpr_x_n = 0;
 							
-//							Check for the LSB of the area to transform :
+//							Check for the LSB of the bit-stream of 1s :
 							if(jj == i-cnt+1)
 							{
 								std::cout<<"LSB so let's put a 1 to x_n!"<<endl;
 								hlpr_x_n = 1;
 							}
-//							Check for the MSB of the area to transform :
+//							Check for the MSB of the bit-stream of 1s :
 							else if(jj == i+1)
 							{
 								std::cout<<"MSB so let's put a 1 to x_p!"<<endl;
@@ -163,14 +163,16 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_n)
 							}
 							x_p.set_slc(jj,hlpr_x_p.slc<1>(0));
 							x_n.set_slc(jj,hlpr_x_n.slc<1>(0));
+//							The algorithm scanns from LSB to MSB, so there is no need to preserve
+//							also the updated x_n's 1s, because the algorithm will never check them again  
 /*that was correct*/		num_upd.set_slc(jj,hlpr_x_p.slc<1>(0));
 ///*lets try that*/			num_upd.set_slc(jj,num.slc<1>(jj));	  //mpa lathos
 						}
 						cnt = 1;
 						
-//						check here if there is an overlapping combination, have to check in the x_p variable, because num is not updated :
+//						Check here if there is an overlapping combination :
 
-						if( num_upd.slc<1>(i+2)==1)													//new code for update the num_upd variable
+						if( num_upd.slc<1>(i+2)==1)
 						{
 							std::cout<<"~ ~ ~ we WILL have an overlapp ~ ~ ~"<<endl;
 							rdy_ovrlp_comb = 1;
@@ -178,9 +180,12 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_n)
 					}
 					else
 					{
+//						If there was found a single 1 and not a bit-stream of consequtive 1s, then just :
 						ac_int<1,false> hlpr2 = 1;
-						x_p.set_slc(i,hlpr2.slc<1>(0));		//new code for x_p assign (15/12)
+//						- copy the single 1s found to the x_p and 
+						x_p.set_slc(i,hlpr2.slc<1>(0));	
 						hlpr2 = 0;
+//						- invert them to the x_n :
 						x_n.set_slc(i,hlpr2.slc<1>(0));
 					}	
 				}
