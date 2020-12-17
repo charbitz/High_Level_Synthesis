@@ -32,7 +32,7 @@
 
 using std::endl;
 
-static const int W = 8;
+static const int W = 18;
 typedef ac_int<W,true> s_int;			//sint stand for signed int
 //	x_p and x_m need to have 1 bit more in order to compute correctly the cases,
 // 	which num is in a form like 11XXX..X , where X is a 1 or a 0 :
@@ -40,6 +40,8 @@ typedef ac_int<W+1,false> un_int;		//un_int stands for unsigned int
 
 
 // The function which converts num to it's CSD representation :
+//Trial for template :
+template<int W>
 void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 {
 //	Trial for run with overlapping combinations :
@@ -54,8 +56,8 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 	for(int k=0;k<W;k++)
 	{
 //		num_upd.set_slc(k,num.) // ayto den xreiaazetai tora epeidh to theto sthnarxh num_upd = num
-		std::cout<<"delete me after that ___num("<<k<<") :"<<num.slc<1>(k)<<endl;
-		std::cout<<"delete me after that ___num_upd("<<k<<") :"<<num_upd.slc<1>(k)<<endl;
+		std::cout << "delete me after that ___num("<<k<<") :" << num.template slc<1>(k) << endl;
+		std::cout << "delete me after that ___num_upd("<<k<<") :" << num_upd.template slc<1>(k) << endl;
 	}
 //	UA DIAGRPHEI
  
@@ -71,7 +73,7 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 			rdy_ovrlp_comb = 0;
 		}
 		
-		if(num_upd.slc<1>(i) == 1)
+		if(num_upd.template slc<1>(i) == 1)
 		{
 			if(i == W-1)
 			{
@@ -130,7 +132,7 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 			else
 			{
 //				Now we check all the other bits apart from MSB : 
-				if(num_upd.slc<1>(i)==num_upd.slc<1>(i+1))
+				if(num_upd.template slc<1>(i)==num_upd.template slc<1>(i+1))
 				{
 					std::cout<<"		2 consequtively 1s found!"<<endl;
 					cnt += 1;
@@ -172,7 +174,7 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 						
 //						Check here if there is an overlapping combination :
 
-						if( num_upd.slc<1>(i+2)==1)
+						if( num_upd.template slc<1>(i+2)==1)
 						{
 							std::cout<<"~ ~ ~ we WILL have an overlapp ~ ~ ~"<<endl;
 							rdy_ovrlp_comb = 1;
@@ -201,7 +203,7 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 	std::cout<<"inside csd:		num_upd ::: "<<endl;
 	for(int k=0;k<W;k++)
 	{
-		std::cout<<"num_upd("<<k<<"): "<<num_upd.slc<1>(k)<<endl;
+		std::cout<<"num_upd("<<k<<"): "<<num_upd.template slc<1>(k)<<endl;
 	}
 		
 }
@@ -212,6 +214,8 @@ int main()
 	s_int num;
 	un_int x_p;
 	un_int x_m;
+	
+
 	
 //	num = 87;	 // W = 7
 //	num = 76;	 // W = 7
@@ -236,13 +240,17 @@ int main()
 
 //	num = 171;	 // W = 8
 	
-//	num = 219051;// W = 18
+	num = 219051;// W = 18
 
-	num = 231; 	 // W = 8
+//	num = 231; 	 // W = 8
 	x_p = x_m = 0;
-	
+//		
 //	Call function to encode num into x_p and x_n :
-	csd_encode(num, x_p, x_m);
+//	csd_encode(num, x_p, x_m);
+	
+//	Call the fuction csd_encode with template int W = 8 :
+	csd_encode<W>(num, x_p, x_m);
+	
 	
 //	Some prints in order to check input num and outputs x_p and x_m (print the bitstream of variables):
 	std::cout<<"		num ::: "<<endl;
