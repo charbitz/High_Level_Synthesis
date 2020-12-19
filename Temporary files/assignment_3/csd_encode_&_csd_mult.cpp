@@ -26,29 +26,33 @@
 /* The thought is to check at the begining if num(i)==1 and then to check if i is the position of MSB (W-1) */
 
 #include <iostream>
-#include<ac_int.h>
-#include<ac_fixed.h>
-#include<ac_channel.h>
-	
+#include <ac_int.h>
+#include <cstdlib>
+#include <ctime>
+
 using std::endl;
 
-static const int W = 10;		//num of bits for num (variable which is going to be CSD encoded)
+static const int W = 6;		//num of bits for num (variable which is going to be CSD encoded)
+
+static const int RUNS = 10;
 
 //Declaring a global variable which is the expected number of bits for the output of csd_mul function :
-const int Wout = 2*W;	//( W + pos_gr_one )
+//const int Wout = 2*W;	//( W + pos_gr_one )
 
-typedef ac_int<W,true> s_int;			//s_int stands for signed int
+//typedef ac_int<W,true> s_int;			//s_int stands for signed int
 //	x_p and x_m need to have 1 bit more in order to compute correctly the cases,
 // 	which num is in a form like 11XXX..X , where X is a 1 or a 0 :
-typedef ac_int<W+1,false> un_int;		//un_int stands for unsigned int
+//typedef ac_int<W+1,false> un_int;		//un_int stands for unsigned int
 		
 
 
 // The function which converts num to it's CSD representation :
 //Trial for template :
 template<int W>
-void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
+void csd_encode(ac_int<W,true> &num, ac_int<W+1,false> &x_p, ac_int<W+1,false> &x_m)
 {
+	x_p = 0;
+	x_m = 0;
 //	Trial for run with overlapping combinations :
 	
 //	cnt will be the counter of the consequtively 1s :
@@ -57,23 +61,23 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 	int rdy_ovrlp_comb = 0;
 //	We need to update the num in order to be able to find overlapping combinations :
 	ac_int<W,false> num_upd = num;
-//	UA DIAGRPHEI 
-	for(int k=0;k<W;k++)
-	{
-//		num_upd.set_slc(k,num.) // ayto den xreiaazetai tora epeidh to theto sthnarxh num_upd = num
-		std::cout << "delete me after that ___num("<<k<<") :" << num.template slc<1>(k) << endl;
-		std::cout << "delete me after that ___num_upd("<<k<<") :" << num_upd.template slc<1>(k) << endl;
-	}
-//	UA DIAGRPHEI
+////	UA DIAGRPHEI 
+//	for(int k=0;k<W;k++)
+//	{
+////		num_upd.set_slc(k,num.) // ayto den xreiaazetai tora epeidh to theto sthnarxh num_upd = num
+//		std::cout << "delete me after that ___num("<<k<<") :" << num.template slc<1>(k) << endl;
+//		std::cout << "delete me after that ___num_upd("<<k<<") :" << num_upd.template slc<1>(k) << endl;
+//	}
+////	UA DIAGRPHEI
  
 	for(int i=0;i<W;i++)
 	{
-		std::cout<<"i = "<<i<<endl;
+//		std::cout<<"i = "<<i<<endl;
 //		Check here if there was an alert for an overalapping combination. 
 //		If  yes, start checking from the previous bit , not the current one:
 		if(rdy_ovrlp_comb == 1)
 		{
-			std::cout<<"overlapping comb situation here!!!"<<endl;
+//			std::cout<<"overlapping comb situation here!!!"<<endl;
 			i = i - 1;
 			rdy_ovrlp_comb = 0;
 		}
@@ -83,7 +87,7 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 			if(i == W-1)
 			{
 //				Here we check MSB, so no need to check for consecutive 1s :
-				std::cout<<"LAST BIT (W-1) is an 1 !!! "<<endl;
+//				std::cout<<"LAST BIT (W-1) is an 1 !!! "<<endl;
 				
 //				The conditin cnt>1 means that we had at least 2 consequtive 1s(a wanted combination found), otherwise we had just found a single 1 :
 				if(cnt>1)
@@ -94,14 +98,14 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 					
 					for(int j=i-cnt+1;j<i+2;j++)
 					{
-						std::cout<<"  j = "<<j<<endl;
+//						std::cout<<"  j = "<<j<<endl;
 						
 						hlpr_xm = 0;
 						hlpr_xp = 0;
 //						At the LSB we need to put a 0 to x_m:
 						if(j == i-cnt+1)
 						{
-							std::cout<<"first bit so let's put a 1 to x_m!"<<endl;
+//							std::cout<<"first bit so let's put a 1 to x_m!"<<endl;
 							hlpr_xm = 1;
 						}
 //						At the MSB (W-1) we need to put an 1 to x_p:
@@ -125,12 +129,12 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 //					x_p.set_slc(i,hlpr2.slc<1>(0));		//new code for x_p assign (15/12)
 
 //					-copy the single 1 for x_p:
-					std::cout<<"Found single 1 so copy it for x_p"<<endl;
+//					std::cout<<"Found single 1 so copy it for x_p"<<endl;
 					x_p.set_slc(i,hlpr_single.slc<1>(0));
 
 					hlpr_single = 0;
 //					-convert the single 1 into a 0 for x_m:
-					std::cout<<"Found single 1 so convert it to 0 for x_m"<<endl;
+//					std::cout<<"Found single 1 so convert it to 0 for x_m"<<endl;
 					x_m.set_slc(i,hlpr_single.slc<1>(0));
 				}	
 			}
@@ -139,7 +143,7 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 //				Now we check all the other bits apart from MSB : 
 				if(num_upd.template slc<1>(i)==num_upd.template slc<1>(i+1))
 				{
-					std::cout<<"		2 consequtively 1s found!"<<endl;
+//					std::cout<<"		2 consequtively 1s found!"<<endl;
 					cnt += 1;
 				}
 				else
@@ -152,20 +156,20 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 						
 						for(int jj=i-cnt+1;jj<i+2;jj++)
 						{
-							std::cout<<"  jj = "<<jj<<endl;
+//							std::cout<<"  jj = "<<jj<<endl;
 							hlpr_x_p = 0;
 							hlpr_x_m = 0;
 							
 //							Check for the LSB of the bit-stream of 1s :
 							if(jj == i-cnt+1)
 							{
-								std::cout<<"LSB so let's put a 1 to x_m!"<<endl;
+//								std::cout<<"LSB so let's put a 1 to x_m!"<<endl;
 								hlpr_x_m = 1;
 							}
 //							Check for the MSB of the bit-stream of 1s :
 							else if(jj == i+1)
 							{
-								std::cout<<"MSB so let's put a 1 to x_p!"<<endl;
+//								std::cout<<"MSB so let's put a 1 to x_p!"<<endl;
 								hlpr_x_p = 1;
 							}
 							x_p.set_slc(jj,hlpr_x_p.slc<1>(0));
@@ -181,7 +185,7 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 
 						if( num_upd.template slc<1>(i+2)==1)
 						{
-							std::cout<<"~ ~ ~ we WILL have an overlapp ~ ~ ~"<<endl;
+//							std::cout<<"~ ~ ~ we WILL have an overlapp ~ ~ ~"<<endl;
 							rdy_ovrlp_comb = 1;
 						}		
 					}
@@ -199,27 +203,27 @@ void csd_encode(s_int &num, un_int &x_p, un_int &x_m)
 			}
 		}
 	}
-	std::cout<<"TESTs:"<<endl;
-	std::cout<<"num :"<<num<<endl;
-	std::cout<<"x_p:"<<x_p<<endl;
-	std::cout<<"x_m:"<<x_m<<endl;
-	std::cout<<"cnt:"<<cnt<<endl;
+//	std::cout<<"TESTs:"<<endl;
+//	std::cout<<"num :"<<num<<endl;
+//	std::cout<<"x_p:"<<x_p<<endl;
+//	std::cout<<"x_m:"<<x_m<<endl;
+//	std::cout<<"cnt:"<<cnt<<endl;
 	
-	std::cout<<"inside csd:		num_upd ::: "<<endl;
+//	std::cout<<"inside csd:		num_upd ::: "<<endl;
 	for(int k=0;k<W;k++)
 	{
-		std::cout<<"num_upd("<<k<<"): "<<num_upd.template slc<1>(k)<<endl;
+//		std::cout<<"num_upd("<<k<<"): "<<num_upd.template slc<1>(k)<<endl;
 	}
 
 }
 
-
-ac_int<Wout,true> csd_mult(s_int &in, un_int &x_p, un_int &x_m)
+template<int W>
+ac_int<2*W,true> csd_mult(ac_int<W,true> &in, ac_int<W+1,false> &x_p, ac_int<W+1,false> &x_m)
 {
-	ac_int<Wout,true> out = 0;
+	ac_int<2*W,true> out = 0;
 
 //	We need to icrease the number of bits of variable in, in order to represent correctly the shifting value, so we have in augmented:
-	ac_int<Wout,true> in_augm = in;
+	ac_int<2*W,true> in_augm = in;
 	
 //	for(int k=0;k<W;k++)
 //	{
@@ -233,139 +237,120 @@ ac_int<Wout,true> csd_mult(s_int &in, un_int &x_p, un_int &x_m)
 //	}
 	
 	//	print the in's and in_augm's value :
-	std::cout<<"after conversion in 's value is "<<in<<endl;
-	std::cout<<"after conversion in_augm 's value is "<<in_augm<<endl<<endl;
+//	std::cout<<"after conversion in 's value is "<<in<<endl;
+//	std::cout<<"after conversion in_augm 's value is "<<in_augm<<endl<<endl;
 	
 //	Because x_p and x_m have W+1 bits, we need to take into account also their MSB (i = W) :
 	for(int i=0;i<W+1;i++)
 	{
-		std::cout<<"i = "<<i<<endl;
-		if(x_p.slc<1>(i) == 1)
+//		std::cout<<"i = "<<i<<endl;
+		if(x_p.template slc<1>(i) == 1)
 		{
-			std::cout<<"found 1 at X_P"<<endl;
-			std::cout<<"out prin to shift :"<<out<<endl;
+//			std::cout<<"found 1 at X_P"<<endl;
+//			std::cout<<"out prin to shift :"<<out<<endl;
 			out = out + (in_augm << i);
-			std::cout<<"sum meta to shift :"<<out<<endl;	
+//			std::cout<<"sum meta to shift :"<<out<<endl;	
 		}
 		
-		if(x_m.slc<1>(i) == 1)
+		if(x_m.template slc<1>(i) == 1)
 		{
-			std::cout<<"found 1 at X_M"<<endl;
-			std::cout<<"out prin to shift :"<<out<<endl;
+//			std::cout<<"found 1 at X_M"<<endl;
+//			std::cout<<"out prin to shift :"<<out<<endl;
 			out = out - (in_augm << i);
-			std::cout<<"out meta to shift :"<<out<<endl;	
+//			std::cout<<"out meta to shift :"<<out<<endl;	
 		}
 	}
 	
-	std::cout<<"out after for = "<<out<<endl;
+//	std::cout<<"out after for = "<<out<<endl;
 	return out;
 }
 
 int main()
 {
-	s_int num;
-	un_int x_p;
-	un_int x_m;
-	s_int in;
-	ac_int<Wout,true> out;
-	
-//	num = 87;	 // W = 7
-//	num = 76;	 // W = 7
-//	num = 754;	 // W = 11
-//	num = 483;	 // W = 11
-//	num = 20083; // W = 15
-//	num = 147;   // W = 9
-//	num = 147;   // W = 8
-//	num = 2;     // W = 5
-//	num = 211;   // W = 8
-//	num = 211;   // W = 9
-//	num = 819;   // W = 10
+	ac_int<W,true> num;
+	ac_int<W+1,false> x_p;
+	ac_int<W+1,false> x_m;
+	ac_int<W,true> in;
+	ac_int<2*W,true> out;
+		
+	std::srand(std::time(NULL));
 
-//	num = 19;    //	W = 5
-//	num = 13;	 // W = 5
-//	num = 6;	 // W = 5
-//	num = 26;    // W = 5
-//	num = -6;
-//	num = 43; 	 // W = 7
-//	num = 62; 	 // W = 8
-//	num = 150; 	 // W = 9
 
-//	num = 171;	 // W = 8
-	
-//	num = 219051;// W = 18
 
-//	num = 231; 	 // W = 8
-	num = 23;    // W = 5
-	in = 7;
-	x_p = x_m = 0;
+//	num = 23;    // W = 5
+//	in = 7;
+//	x_p = x_m = 0;
 //		
 //	Call function to encode num into x_p and x_n :
 //	csd_encode(num, x_p, x_m);
 	
 //	Call the fuction csd_encode with template int W = 8 :
-	csd_encode<W>(num, x_p, x_m);
-	
-//	Some prints in order to check input num and outputs x_p and x_m (print the bitstream of variables):
-	std::cout<<"		num ::: "<<endl;
-	for(int i=0;i<W;i++)
-	{
-		std::cout<<"num("<<i<<"): "<<num.slc<1>(i)<<endl;
-	}
-	
-	std::cout<<"		x_p ::: "<<endl;	
-	for(int i=0;i<W+1;i++)
-	{
-		std::cout<<"x_p("<<i<<"): "<<x_p.slc<1>(i)<<endl;
-	}
-	
-	std::cout<<"		x_m ::: "<<endl;	
-	for(int i=0;i<W+1;i++)
-	{
-		std::cout<<"x_m("<<i<<"): "<<x_m.slc<1>(i)<<endl;
-	}
-
-//	Some prints in order to check input num and outputs x_p and x_n (print the value of variables):
-	std::cout<<"num (signed) :"<<num<<endl;
-	std::cout<<"x_p :"<<x_p<<endl;
-	std::cout<<"x_m :"<<x_m<<endl;	
-	
-	
-//	In order to call csd_mult we need to know the number of bits of the output : Wout, which equals to : number of bits of variable in which will be 
-	
-////	Function to compute pos_gr_one :
-//	int pos_gr_one = 0;
-//	for(int i=0;i<W+1;i++)
-//	{
-//		if(x_p.slc<1>(i) == 1)
-//		{
-//			if(i>pos_gr_one)
-//			{
-//				pos_gr_one = i;
-//			}
-//		}
-//	}
-//	
-//	std::cout<<"The position of greater 1 :"<<pos_gr_one<<endl;
-//	
-////	Wout will have V number of bits plus pos_gr_one because the position of greater 1 will have the greater shifting of number in at the end of CSD multiplication,
-////	So Wout will be V plus pos_gr_one bits :
-//	Wout = W + pos_gr_one;
-//	std::cout<<"Wout will be :"<<Wout<<endl;	
-//		
-
-	std::cout<<endl<<endl<<endl;
-	
+//	csd_encode<W>(num, x_p, x_m);
+		
 //	call csd_mult :
-	out = csd_mult(in, x_p, x_m);
-	std::cout<<"out = "<<out<<endl;
+//	out = csd_mult(in, x_p, x_m);
+//	Call the fuction csd_mult with template int W = 8 :
+//	csd_mult<W>(in, x_p, x_m);	
+//	std::cout<<"out = "<<out<<endl;
 	
+
+
+	for(int k=0;k<RUNS;k++)
+	{
+		std::cout << " ~ ~ ~ Trial " << k << " ~ ~ ~ \n";
+//		The range of possible signed numbers of W=6 bits is : [-32...31]
+		num = std::rand()%63 + (-32);
+		
+		std::cout<<" num :"<<num<<endl;
+		std::cout<<"  ";
+		for(int j=W-1;j>=0;j--)
+		{
+			std::cout<<num[j]<<" ";
+		}
+		std::cout<<endl<<endl;
+		
+//		call csd_encode :
+		csd_encode<W>(num, x_p, x_m);
+		
+		std::cout<<" x_p : "<<x_p<<endl;
+		for(int j=W;j>=0;j--)
+		{
+			std::cout<<x_p[j]<<" ";
+		}
+		std::cout<<endl<<endl;
+		
+		std::cout<<" x_m : "<<x_m<<endl;
+		for(int j=W;j>=0;j--)
+		{
+			std::cout<<x_m[j]<<" ";
+		}
+		std::cout<<endl<<endl;
+		
+//		random number generator for variable in :
+		in = std::rand()%63 + (-32);
+		
+		std::cout<<" in : "<<in<<endl;
+		std::cout<<"  ";
+		for(int j=W-1;j>=0;j--)
+		{
+			std::cout<<in[j]<<" ";
+		}
+		std::cout<<endl<<endl;
+		
+//		call csd_mult :
+		out = csd_mult(in, x_p, x_m);
+		
+		std::cout<<" out : "<<out<<endl;
+		for(int j=2*W-1;j>=0;j--)
+		{
+			std::cout<<out[j]<<" ";
+		}
+		std::cout<<endl<<endl<<endl<<endl<<endl<<endl;
+		
+				
+	}
 	
-//	std::cout<<"		out ::: "<<endl;	
-//	for(int i=0;i<Wout;i++)
-//	{
-//		std::cout<<"out("<<i<<"): "<<out.slc<1>(i)<<endl;
-//	}
-//	std::cout<<"out :"<<out<<endl;	
+
 
 
 }
