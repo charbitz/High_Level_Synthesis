@@ -1,5 +1,5 @@
-#include<C:/Users/HP/Desktop/HLS_demos/ac_int.h>
-#include<C:/Users/HP/Desktop/HLS_demos/ac_channel.h>
+#include<ac_int.h>
+#include<ac_channel.h>
 #include <stdlib.h> // it's for rand()
 #include <time.h>   // it's for seeding the srand() 
 
@@ -7,6 +7,7 @@
 using std::endl;
 
 static const int W = 4;
+static const int RUNS = 10;
 
 typedef ac_int<W,false> Data_t ; 
 
@@ -58,19 +59,19 @@ void run_length_encode (ac_channel< Data_t >&in , ac_channel< Data_t >&out)
 
 int main()
 {
-	srand(time(NULL));
+//	srand(time(NULL));
 	
 	ac_channel< Data_t >in;
 	ac_channel< Data_t >out;
 	
-	int random_num ;
+	int random_num[10] ;
 	
-//	write values in channel via in port :
+////	write values in channel via in port :
 //	std::cout<<"reading from main"<<endl;
 //	for(int i=0;i<3;i++)
 //	{
 //		in.write(2);
-//		in.write(as);
+//		in.write(2);
 //		in.write(2);
 //		in.write(2);
 //		in.write(3);
@@ -96,28 +97,28 @@ int main()
 	
 //	generate pseudo-random numbers :
 
-	std::cout<<"reading from main rand()!!!"<<endl;
-	
-	for(int k=0;k<30;k++)
-	{
-		random_num = rand() % 16 ;		// in order not to wrap arround due to 4 bits limit
-		std::cout<<"random_num is "<<random_num<<endl;
-		in.write(random_num);
-		run_length_encode(in,out);	
-	}
-
-	std::cout<<"writing to main"<<endl;
-	
-	do
-	{
-		std::cout<<out.read()<<endl;
-	}
-	while(out.available(1));
+//	std::cout<<"reading from main rand()!!!"<<endl;
+//	
+//	for(int k=0;k<30;k++)
+//	{
+//		random_num = rand() % 16 ;		// in order not to wrap arround due to 4 bits limit
+//		std::cout<<"random_num is "<<random_num<<endl;
+//		in.write(random_num);
+//		run_length_encode(in,out);	
+//	}
+//
+//	std::cout<<"writing to main"<<endl;
+//	
+//	do
+//	{
+//		std::cout<<out.read()<<endl;
+//	}
+//	while(out.available(1));
 
 		
 //	std::cout<<"reading to main"<<endl;
 //	
-//	for(int j=0;j<15;j++)
+//	for(int j=0;j<20;j++)
 //	{
 //		if(out.available(1) )
 //		{
@@ -125,5 +126,37 @@ int main()
 //		}
 //	}
 	
+	
+	for (int i=0;i<RUNS;i++)
+	{
+		std::cout<<" ~ ~ ~ Trial "<<i<<" ~ ~ ~ "<<endl<<endl;
+		
+		std::cout<<" random_num : "<<endl;
+		for(int k=0;k<10;k++)
+		{
+			random_num[k] = rand() % 16 ;		// in order not to wrap arround due to 4 bits limit
+			std::cout<<random_num[k]<<" ";
+		}
+		std::cout<<endl<<endl;
+		
+		for(int k=0;k<10;k++)
+		{
+			in.write(random_num[k]);	
+		}
+		
+		for(int k=0;k<10;k++)
+		{
+			run_length_encode(in,out);		
+		}
+		
+		std::cout<<" out : "<<endl;
+		do
+		{
+			std::cout<<out.read()<<" ";
+		}
+		while(out.available(1));
+		std::cout<<endl<<endl<<endl<<endl;		
+	}
+
 	return 0;
 }
