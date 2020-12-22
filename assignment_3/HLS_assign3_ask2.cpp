@@ -125,7 +125,7 @@ int main()
 	bool end_round;
 	bool win;
 	
-//	std::srand(std::time(NULL));
+	std::srand(std::time(NULL));
 	
 	Card random_val;		// we need 4 bits, so range : [0...15]
 	
