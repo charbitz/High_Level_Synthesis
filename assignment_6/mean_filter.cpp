@@ -40,56 +40,6 @@ int main()
 //  reseed RNG :
 //  	std::srand(std::time(NULL));
 	
-////	a quick test :
-//	
-////	DECLARATION :
-//	for(int i=0;i<N;i++)
-//	{
-//		for(int j=0;j<M;j++)
-//		{
-//			img[i][j] = 10 * j;
-//			out[i][j] = 10 * j;
-//		}
-//	}
-//	
-////	PRINTING INITIAL VALUES :
-//	std :: cout << "Initial image :" << endl;
-//	for(int i=0;i<N;i++)
-//	{
-//		for(int j=0;j<M;j++)
-//		{
-//			std::cout<<img[i][j]<<"	";
-//			if (j == M-1)
-//			{
-//				std :: cout << endl;
-//			}
-//			
-//		}
-//	}
-//	
-//	std :: cout<<endl;
-//	
-////	CALLING mean_filter :
-//	mean_filter(img, out);
-//	
-////	PRINTING THE FINAL VALUES :
-//
-//	std :: cout << "Final image :" << endl << endl;
-//	
-//	for(int i=0;i<N;i++)
-//	{
-//		for(int j=0;j<M;j++)
-//		{
-//			std::cout<<out[i][j]<<"	";
-//			if (j == M-1)
-//			{
-//				std :: cout << endl;
-//			}
-//			
-//		}
-//	}
-//	
-	
 //	testbench :
 	for(int k=0;k<RUNS;k++)
 	{
