@@ -17,7 +17,7 @@ void abcde(num_A A[N], num B[N], num C[N], num D[N], num E[N])
 {
 	for (int i=0; i < N; i++)
 	{
-		A[i] = (B[i]*C[i] ) - ( D[i]*E[i]);
+		A[i] = B[i]*C[i] - D[i]*E[i];
 	}
 }
 
