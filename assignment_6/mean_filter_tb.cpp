@@ -1,15 +1,12 @@
-//#include <ac_int.h>
-//#include <ac_channel.h>
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <ac_int.h>
 
-#include "mean_fiter.h"
+#include "mean_filter.h"
 
-static const int N = 10;
-static const int M = 10;
-static const int RUNS = 10;
-
+//static const int RUNS = 10;
 
 typedef ac_int<8,false> pxl;
 
