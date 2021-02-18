@@ -1,10 +1,6 @@
 #ifndef MEAN_FILTER_NEW_H
 #define MEAN_FILTER_NEW_H
 
-//file that had II=1
-
-//#include <ac_int.h>
-//#include <ac_channel.h>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -31,7 +27,6 @@ class MeanFilter{
 		{
 			p = 0;
 		};
-
 
 #pragma hls_design interface
 void CCS_BLOCK(mean_filter)(pxl img[N][M], pxl out[N][M])
