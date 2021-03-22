@@ -117,8 +117,6 @@ class BlackJack
 		}			
 };
 
-
-
 int main()
 {
 	ac_channel<Card> in_card;
@@ -179,7 +177,6 @@ int main()
 		
 		end_round = 0;
 //		bljck.~BlackJack();
-	}
-	
+	}	
 	return 0;
 }
