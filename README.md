@@ -50,3 +50,10 @@
 
 ### Exercise 1:
 * Design a hardware module with HLS that accelerates a given loop in C++.
+
+### Exercise 2:
+
+* Based on mean filter on image processing, optimize the given C++ loop in roder to:
+
+- Parallelize a given loop of the given 1x5 mean filter function and find the best initiation interval to achieve that.
+- Leverage the memory access pattern required by the one-dimensional mean filter to modify the code to achieve a better initiation interval.
