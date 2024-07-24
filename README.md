@@ -41,4 +41,12 @@
 - Achieve the lowest possible latency using loop pipelining.
 - You can reduce memory accesses by using smart local variables. At the same time improve the loop pipeline to achieve an II = 1.
 
+## Assignment 5
 
+### Exercise 1:
+* Design a hardware module called graph_color that will compute the chromatic number of a graph and the color assigned to each node.
+
+## Assignment 6
+
+### Exercise 1:
+* Design a hardware module with HLS that accelerates a given loop in C++.
