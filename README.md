@@ -34,7 +34,7 @@
 
 ### Exercise 1:
 * Implement a given C++ function via High-Level Synthesis to hardware with some requirements:
-- The interface of the submodule will include two separate 16-bit memory interfaces.
+** The interface of the submodule will include two separate 16-bit memory interfaces.
 -  Operation at 500 MHz with 45nm technology.
 - The circuit must successfully pass RTL simulation through Catapult.
 - Achieve the lowest possible latency using loop pipelining.
