@@ -5,14 +5,14 @@
 
 ## Assignment 1
 
-# Exercise 1:
+### Exercise 1:
 * dsas
-# Exercise 2:
+### Exercise 2:
 * dfsddsfsd
 
 ## Assignment 2
 
-# Exercise 1:
+### Exercise 1:
 * dsfdsas
-# Exercise 2:
+### Exercise 2:
 * dfsdfsdsfsd
