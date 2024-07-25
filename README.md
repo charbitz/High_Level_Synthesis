@@ -1,5 +1,5 @@
 # Description
-***This repo contains all 6 requested assignments of the course **Hogh Level Synthesis** of the 9th semester.***
+***This repo contains all 6 requested assignments of the course **High Level Synthesis** of the 9th semester.***
 
 * **This repo is for demonstration purposes only**
 
@@ -33,7 +33,7 @@
 ## Assignment 4
 
 ### Exercise 1:
-* Implement a given C++ function via High-Level Synthesis to hardware with some requirements:
+* Implement a given C++ function with High-Level Synthesis to hardware with some requirements:
 
 - The interface of the submodule will include two separate 16-bit memory interfaces.
 -  Operation at 500 MHz with 45nm technology.
@@ -53,7 +53,7 @@
 
 ### Exercise 2:
 
-* Based on mean filter on image processing, optimize the given C++ loop in roder to:
+* Based on mean filter on image processing, optimize the given C++ loop in order to:
 
 - Parallelize a given loop of the given 1x5 mean filter function and find the best initiation interval to achieve that.
 - Leverage the memory access pattern required by the one-dimensional mean filter to modify the code to achieve a better initiation interval.
